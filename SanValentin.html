@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuurphyVR | Operation Skuld</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --accent-color: #ff0055;
+            --orange-sg: #ff8c00;
+            --text-color: #e0e0e0;
+            --glass: rgba(20, 20, 20, 0.95);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Share Tech Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- OVERLAY DE INICIO --- */
+        #start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease;
+            cursor: pointer;
+        }
+
+        .nixie-tube {
+            font-size: 3rem;
+            color: var(--orange-sg);
+            text-shadow: 0 0 15px var(--orange-sg);
+            display: inline-block;
+            margin: 0 2px;
+        }
+
+        .start-text {
+            margin-top: 20px;
+            color: #fff;
+            animation: pulse 1.5s infinite;
+            letter-spacing: 3px;
+        }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        #main-content {
+            opacity: 0;
+            transition: opacity 2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        #heart-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* CARTA */
+        .letter-container {
+            max-width: 600px;
+            width: 100%;
+            background: var(--glass);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .typewriter {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* --- ZONA DE PERSONALIZACIÓN --- */
+        .custom-zone {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label { color: var(--orange-sg); font-size: 0.9rem; }
+
+        input[type="text"] {
+            background: #111;
+            border: 1px solid #444;
+            color: white;
+            padding: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            border-radius: 5px;
+        }
+
+        input[type="file"] {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* --- CERTIFICADO (DISEÑO VISUAL) --- */
+        .certificate-card {
+            background: #111; 
+            background-image: linear-gradient(135deg, #1a1a1a 0%, #050505 100%);
+            border: 2px solid var(--orange-sg);
+            width: 500px;
+            height: 280px;
+            padding: 25px;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .certificate-card::before {
+            content: "FUTURE GADGET LAB";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            pointer-events: none;
+            font-weight: bold;
+        }
+
+        .cert-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid var(--orange-sg);
+            object-fit: cover;
+            background: #000;
+            z-index: 2;
+        }
+
+        .cert-info { z-index: 2; flex: 1; }
+
+        .cert-info h3 {
+            color: var(--orange-sg);
+            text-transform: uppercase;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 140, 0, 0.3);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .cert-details p {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .variable-text {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .badge {
+            background: var(--orange-sg);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
+        /* Botón de descarga */
+        .btn-download {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .btn-download:hover {
+            transform: scale(1.05);
+            background: #ff3377;
+        }
+
+        /* --- ESTILOS NUEVOS PARA "NEXT STREAM" --- */
+        .loading-section {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+
+        .loading-bar-container {
+            width: 100%;
+            height: 6px;
+            background: #222;
+            margin-top: 10px;
+            position: relative;
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .loading-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-color);
+            animation: loadProgress 8s ease-out forwards; /* 8 segundos de carga */
+        }
+
+        .glitch-load {
+            font-size: 1rem;
+            color: var(--accent-color);
+            letter-spacing: 2px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            30% { width: 40%; }
+            60% { width: 75%; }
+            80% { width: 90%; }
+            100% { width: 99%; } /* Se queda en 99% a propósito */
+        }
+        /* ------------------------------------------- */
+
+        @media (max-width: 520px) {
+            .certificate-card {
+                transform: scale(0.65);
+                margin-left: -85px;
+                margin-right: -85px;
+            }
+        }
+
+        @keyframes pulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" src="music.mp3" loop></audio>
+
+    <div id="start-overlay">
+        <div id="meter">
+            <span class="nixie-tube">1</span>.
+            <span class="nixie-tube">0</span>
+            <span class="nixie-tube">4</span>
+            <span class="nixie-tube">8</span>
+            <span class="nixie-tube">5</span>
+            <span class="nixie-tube">9</span>
+        </div>
+        <div class="start-text">[ CLICK PARA INICIAR PROTOCOLO ]</div>
+    </div>
+
+    <canvas id="heart-canvas"></canvas>
+
+    <div id="main-content">
+        
+        <div class="letter-container">
+            <h2 style="color:var(--accent-color); margin-bottom:15px;">
+                <i class="fas fa-terminal"></i> INFORME #2026
+            </h2>
+            <div class="typewriter" id="message"></div>
+        </div>
+
+        <div class="custom-zone">
+            <h3 style="color:white; margin-bottom:15px;">>>> PERSONALIZA TU ID</h3>
+            
+            <div class="input-group">
+                <label>NOMBRE DE AGENTE:</label>
+                <input type="text" id="inputName" maxlength="15" placeholder="Escribe tu nombre aquí...">
+            </div>
+            
+            <div class="input-group">
+                <label>FOTO DE PERFIL (Opcional):</label>
+                <input type="file" id="inputImage" accept="image/*">
+            </div>
+        </div>
+
+        <div class="certificate-card" id="export-card">
+            <img src="default.jpg" id="cert-img" alt="Avatar" class="cert-avatar">
+            
+            <div class="cert-info">
+                <h3>LAB MEMBER</h3>
+                <div class="cert-details">
+                    <p>NAME: <span id="cert-name" class="variable-text">UNKNOWN</span></p>
+                    <p>ID: <span id="cert-id" class="variable-text">#0000</span></p>
+                    <p>ROLE: <span class="variable-text">VIEWER</span> <span class="badge">LOYAL</span></p>
+                    <p>DIVERGENCE: <span style="color:var(--orange-sg)">1.048596%</span></p>
+                    <p style="font-size:0.7rem; margin-top:10px; color:#666;">
+                        AUTHORIZED BY MUURPHYVR
+                    </p>
+                </div>
+            </div>
+
+            <div style="position: absolute; right: 20px; bottom: 20px; opacity: 0.3; color: white;">
+                <i class="fas fa-microchip fa-2x"></i>
+            </div>
+        </div>
+
+        <button class="btn-download" onclick="downloadCertificate()">
+            <i class="fas fa-download"></i> DESCARGAR CREDENCIAL
+        </button>
+
+        <div class="loading-section">
+            <div class="glitch-load">>>> NEXT STREAM LOADING...</div>
+            <div class="loading-bar-container">
+                <div class="loading-bar"></div>
+            </div>
+            <p style="font-size: 0.75rem; color: #888; margin-top: 5px; font-family: 'Share Tech Mono';">
+                System check... 99%
+            </p>
+        </div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">
+            Volver a la línea temporal Beta
+        </a>
+    </div>
+
+    <script>
+        // --- 1. LÓGICA DE OVERLAY Y MÚSICA ---
+        const overlay = document.getElementById('start-overlay');
+        const mainContent = document.getElementById('main-content');
+        const audio = document.getElementById('bgm');
+        
+        // Generar un ID aleatorio único para esta sesión
+        const randomID = Math.floor(Math.random() * (9999 - 2) + 2);
+        const formattedID = "#" + randomID.toString().padStart(4, '0');
+        document.getElementById('cert-id').innerText = formattedID;
+
+        overlay.addEventListener('click', () => {
+            audio.volume = 0.3;
+            audio.play().catch(e => console.log(e));
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                mainContent.style.opacity = '1';
+                startTypewriter(); 
+            }, 1000);
+        });
+
+        // --- 2. PERSONALIZACIÓN EN TIEMPO REAL ---
+        const inputName = document.getElementById('inputName');
+        const certName = document.getElementById('cert-name');
+        const inputImage = document.getElementById('inputImage');
+        const certImg = document.getElementById('cert-img');
+
+        inputName.addEventListener('input', (e) => {
+            const val = e.target.value;
+            certName.innerText = val === "" ? "UNKNOWN" : val.toUpperCase();
+        });
+
+        inputImage.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    certImg.src = e.target.result;
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // --- 3. DESCARGAR CERTIFICADO ---
+        function downloadCertificate() {
+            const card = document.getElementById('export-card');
+            
+            html2canvas(card, {
+                backgroundColor: null,
+                scale: 2
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'MuurphyVR_LabMember.png';
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+
+        // --- 4. TEXTO DE LA CARTA ---
+        const textToType = "Hola, miembro del Laboratorio.\n\nHe estado observando las líneas de universo y hay una constante: TU APOYO.\n\nAunque el laboratorio ha estado en silencio (operación encubierta, ya sabes), el hecho de que sigas aquí ha evitado que la divergencia llegue a 0%.\n\nEste certificado es la prueba de que sobreviviste al SERN.\n\nGracias por mantener viva la señal del laboratorio. Aunque he estado ausente, la divergencia no ha llegado a cero gracias a ustedes.\n\nCompleta tus datos abajo, descarga tu identificación oficial y preséntala en el futuro.... talvez sirva de algo.\n\nFELIZ SAN VALENTÍN HERMOSOS LOS AMO MUCHO Y GRACIAS POR SEGUIR AQUI.\n\n El Psy Congroo.";
+        const msgElement = document.getElementById('message');
+        let charIndex = 0;
+
+        function startTypewriter() {
+            if (charIndex < textToType.length) {
+                msgElement.textContent += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(startTypewriter, 40);
+            }
+        }
+
+        // --- 5. FONDO ANIMADO ---
+        const canvas = document.getElementById('heart-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const particles = [];
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.speed = Math.random() * 2 + 1;
+                this.text = Math.random() > 0.5 ? "❤" : "1";
+            }
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height) this.y = -20;
+            }
+            draw() {
+                ctx.fillStyle = "rgba(255, 0, 85, 0.2)";
+                ctx.font = "15px Arial";
+                ctx.fillText(this.text, this.x, this.y);
+            }
+        }
+        for(let i=0; i<50; i++) particles.push(new Particle());
+        function animate() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

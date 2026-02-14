@@ -11,9 +11,10 @@
     <style>
         :root {
             --bg-color: #050505;
-            --card-bg: rgba(22, 22, 22, 0.85); /* Un poco transparente para ver el fondo */
+            --card-bg: rgba(22, 22, 22, 0.85);
             --accent-color: #a64dff; /* Morado neón */
-            --divergence-orange: #ff8c00; /* Naranja tipo Nixie Tube de Steins;Gate */
+            --divergence-orange: #ff8c00; /* Naranja Steins;Gate */
+            --love-color: #ff0055; /* Color para la sorpresa */
             --text-color: #e0e0e0;
         }
 
@@ -23,28 +24,31 @@
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            overflow: hidden; /* Para que el canvas no genere scroll */
-            height: 100vh;
+            /* CAMBIO MOVIL: Usamos min-height y permitimos scroll si la pantalla es chica */
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            padding: 20px 0; /* Espacio arriba y abajo en móviles */
         }
 
-        /* --- CANVAS DE FONDO (La Lluvia Digital) --- */
+        /* --- CANVAS DE FONDO --- */
         #matrix-canvas {
-            position: absolute;
+            position: fixed; /* CAMBIO: Fixed para que se quede quieto al hacer scroll */
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            z-index: -1; /* Detrás de todo */
         }
 
         /* --- TARJETA DE PERFIL --- */
         .profile-card {
             background-color: var(--card-bg);
-            backdrop-filter: blur(5px); /* Efecto vidrio borroso */
+            backdrop-filter: blur(5px);
             width: 90%;
             max-width: 450px;
             border-radius: 16px;
@@ -52,9 +56,10 @@
             text-align: center;
             box-shadow: 0 0 30px rgba(138, 43, 226, 0.2);
             border: 1px solid rgba(166, 77, 255, 0.3);
-            z-index: 10; /* Encima del canvas */
+            z-index: 10;
             position: relative;
             animation: cardEntrance 1s ease-out;
+            margin: auto; /* Centrado */
         }
 
         /* Avatar */
@@ -74,7 +79,7 @@
             box-shadow: 0 0 15px var(--accent-color);
         }
 
-        /* --- EFECTO GLITCH EN EL NOMBRE --- */
+        /* --- GLITCH --- */
         .glitch-wrapper {
             position: relative;
             display: inline-block;
@@ -82,7 +87,7 @@
         }
 
         .glitch-text {
-            font-family: 'Share Tech Mono', monospace; /* Fuente tecnológica */
+            font-family: 'Share Tech Mono', monospace;
             font-size: 2.5rem;
             font-weight: 700;
             color: #fff;
@@ -91,7 +96,11 @@
             text-transform: uppercase;
         }
 
-        /* Capas del glitch (sombra roja y azul) */
+        /* Ajuste de tamaño de fuente para móviles muy pequeños */
+        @media (max-width: 380px) {
+            .glitch-text { font-size: 1.8rem; }
+        }
+
         .glitch-text::before,
         .glitch-text::after {
             content: attr(data-text);
@@ -123,7 +132,6 @@
             10% { clip: rect(93px, 9999px, 76px, 0); }
             15% { clip: rect(10px, 9999px, 3px, 0); }
             20% { clip: rect(27px, 9999px, 5px, 0); }
-            /* Pausa larga sin glitch */
             21%, 100% { clip: rect(0, 0, 0, 0); } 
         }
 
@@ -138,7 +146,7 @@
 
         .subtitle {
             font-family: 'Share Tech Mono', monospace;
-            color: var(--divergence-orange); /* Toque Naranja Steins;Gate */
+            color: var(--divergence-orange);
             font-size: 1rem;
             margin-bottom: 20px;
             letter-spacing: 1px;
@@ -160,11 +168,12 @@
             text-shadow: 0 0 8px rgba(255, 140, 0, 0.4);
         }
 
-        /* Botones */
+        /* Botones Sociales */
         .social-links {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            margin-bottom: 25px; /* Espacio para el botón sorpresa */
         }
 
         .social-btn {
@@ -183,7 +192,6 @@
             overflow: hidden;
         }
 
-        /* Efecto hover estilo escáner */
         .social-btn::before {
             content: '';
             position: absolute;
@@ -205,16 +213,53 @@
             text-shadow: 0 0 5px var(--accent-color);
         }
 
-        @keyframes cardEntrance {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+        /* --- BOTÓN SORPRESA (NUEVO) --- */
+        .surprise-container {
+            margin: 25px 0 15px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .surprise-btn {
+            text-decoration: none;
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid var(--love-color);
+            color: var(--love-color);
+            font-family: 'Share Tech Mono', monospace;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
+            animation: heartPulse 1.5s infinite;
+        }
+
+        .surprise-btn:hover {
+            background: var(--love-color);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--love-color);
+        }
+
+        @keyframes heartPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 0, 85, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
         }
 
         .footer {
-            margin-top: 25px;
+            margin-top: 15px;
             font-size: 0.75rem;
             color: #666;
             font-family: 'Share Tech Mono', monospace;
+        }
+        
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
     </style>
@@ -236,8 +281,9 @@
 
         <div class="bio">
             <p>
-                Streamer chiquito, sueños grandes. Hago streams de variedad, 
-                terror y tecnología. Bienvenido al laboratorio.
+                Streamer chiquito, sueños grandes. Hago streams de variedad.
+                Bienvenido al laboratorio. Recuerden que:
+                Todoso conocen a Muurphy pero nadie sabe sobre Muurphy.
             </p>
             <span class="psy-kongroo">El Psy Congroo</span>
         </div>
@@ -250,10 +296,16 @@
                 <i class="fab fa-tiktok"></i> TikTok
             </a>
             <a href="https://x.com/MuurphyVR" target="_blank" class="social-btn">
-                <i class="fab fa-x"></i> 
+                <i class="fab fa-x"></i> Twitter
             </a>
             <a href="https://www.instagram.com/muurphyvr/" target="_blank" class="social-btn">
                 <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
+
+        <div class="surprise-container">
+            <a href="SanValentin.html" class="surprise-btn">
+                <i class="fas fa-heart"></i> SORPRESA
             </a>
         </div>
 
@@ -285,9 +337,17 @@
 
         // Array para guardar la posición Y de cada columna
         let drops = [];
-        for (let i = 0; i < columns; i++) {
-            drops[i] = 1;
+        // Inicializar
+        function initDrops() {
+            columns = canvas.width / fontSize;
+            drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
         }
+        initDrops();
+        // Reinicializar al cambiar tamaño para que no queden huecos
+        window.addEventListener('resize', initDrops); 
 
         function draw() {
             // Fondo negro con mucha transparencia para dejar rastro (estela)
