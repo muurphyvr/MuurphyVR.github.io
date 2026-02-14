@@ -3,355 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Árbol de Amor Animado</title>
-    <meta name="author" content="Zero">
-    <meta name="copyright" content="Zero - Código libre no comercial">
-    <meta name="description" content="Árbol de Amor Animado: una sorpresa interactiva y romántica.">
-    
+    <title>Sorpresa para el Pecas</title>
     <style>
-        /* --- ESTILOS GENERALES (style.css incorporado) --- */
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background: #fcfcfc;
-            font-size: 16px;
-        }
-
-        .tree-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 520px;
-            height: 520px;
-            z-index: 2;
-        }
-
-        .tree-container svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .tree-container svg path {
-            transition: fill-opacity 0.5s, stroke-dashoffset 1.2s;
-        }
-
-        .tree-container svg.move-and-scale {
-            transition: transform 1.2s cubic-bezier(.77,0,.18,1);
-            transform: translateX(200px) scale(1.35);
-        }
-
-        .animated-heart {
-            transform-origin: center;
-            animation: beat 1s infinite;
-        }
-
-        @keyframes beat {
-            0%, 100% { transform: scale(1); }
-            20% { transform: scale(1.1); }
-            40% { transform: scale(0.95); }
-            60% { transform: scale(1.08); }
-            80% { transform: scale(1); }
-        }
-
-        .dedication-text {
-            position: absolute;
-            top: 50%;
-            left: 3%;
-            transform: translateY(-50%);
-            min-width: 320px;
-            max-width: 600px;
-            font-size: 1.5rem;
-            color: #050505;
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-line;
-            z-index: 3;
-            opacity: 0;
-            pointer-events: none;
-            background: rgba(255,255,255,0.92);
-            border-radius: 0.7em;
-            box-shadow: 0 2px 16px #e6002611;
-            padding: 1em 1.5em;
-            transition: opacity 0.6s;
-        }
-
-        .dedication-text.typing {
-            opacity: 1;
-        }
-
-        .signature {
-            margin-top: 1.5em;
-            font-family: 'Courier New', Courier, monospace; /* O 'Dancing Script' si usas Google Fonts */
-            font-size: 2.2rem;
-            color: #e60026;
-            opacity: 0;
-            transition: opacity 0.7s;
-        }
-
-        .signature.visible {
-            opacity: 1;
-            animation: signature-draw 2.2s steps(24) forwards;
-        }
-
-        @keyframes signature-draw {
-            from { clip-path: inset(0 100% 0 0); }
-            to   { clip-path: inset(0 0 0 0); }
-        }
-
-        .countdown {
+        /* --- ESTILOS DE LA PANTALLA DE INICIO (BANANA EDITION) --- */
+        #welcome-screen {
             position: fixed;
-            left: 50%;
-            bottom: 3%;
-            transform: translateX(-50%) translateY(30px);
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.6rem;
-            color: #333;
-            background: #fff8;
-            padding: 0.4em 1em;
-            border-radius: 1em;
-            z-index: 6;
-            text-align: center;
-            opacity: 0;
-            transition: all 0.8s cubic-bezier(.77,0,.18,1);
-        }
-
-        .countdown.visible {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        #floating-objects {
-            position: fixed;
-            left: 0; top: 0;
+            top: 0; left: 0;
             width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 10;
+            background: #fcfcfc; /* Fondo claro */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            cursor: pointer;
+            transition: opacity 0.8s ease;
         }
 
-        .floating-petal {
-            position: absolute;
-            width: 24px; height: 32px;
-            background: radial-gradient(ellipse at 60% 30%, #ffd6e0 60%, #ff69b4 100%);
-            border-radius: 60% 40% 60% 40% / 60% 60% 40% 40%;
+        /* Estilos para la banana SVG */
+        .banana-svg {
+            width: 120px; /* Tamaño de la banana */
+            height: auto;
+            /* Sombra amarilla suave */
+            filter: drop-shadow(0 8px 15px rgba(255, 215, 0, 0.5));
+            /* Animación de flote y balanceo */
+            animation: float-rock 2.5s ease-in-out infinite alternate;
         }
 
-        /* --- RESPONSIVO MÓVIL --- */
+        /* Animación suave de flote */
+        @keyframes float-rock {
+            0% { transform: translateY(0) rotate(-5deg); }
+            100% { transform: translateY(-25px) rotate(5deg); }
+        }
+
+        .click-text {
+            margin-top: 40px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.3rem;
+            color: #FFD700; /* Color amarillo banana */
+            text-shadow: 1px 1px 2px #DAA520; /* Sombra dorada para contraste */
+            letter-spacing: 2px;
+            font-weight: bold;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* --- RESTO DE ESTILOS (Árbol, texto, etc.) --- */
+        body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background: #fcfcfc; font-size: 16px; }
+        .tree-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 520px; height: 520px; z-index: 2; display: none; /* Oculto al inicio */ }
+        .tree-container svg { width: 100%; height: 100%; display: block; }
+        .tree-container svg path { transition: fill-opacity 0.5s, stroke-dashoffset 1.2s; }
+        .tree-container svg.move-and-scale { transition: transform 1.2s cubic-bezier(.77,0,.18,1); transform: translateX(200px) scale(1.35); }
+        .animated-heart { transform-origin: center; animation: beat 1s infinite; }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 20% { transform: scale(1.1); } 40% { transform: scale(0.95); } 60% { transform: scale(1.08); } 80% { transform: scale(1); } }
+        .dedication-text { position: absolute; top: 50%; left: 3%; transform: translateY(-50%); min-width: 320px; max-width: 600px; font-size: 1.5rem; color: #050505; font-family: 'Courier New', Courier, monospace; white-space: pre-line; z-index: 3; opacity: 0; background: rgba(255,255,255,0.92); border-radius: 0.7em; box-shadow: 0 2px 16px rgba(230,0,38,0.06); padding: 1em 1.5em; transition: opacity 0.6s; }
+        .signature { margin-top: 1.5em; font-family: 'Courier New', Courier, monospace; font-size: 2.2rem; color: #e60026; opacity: 0; transition: opacity 0.7s; }
+        .signature.visible { opacity: 1; animation: signature-draw 2.2s steps(24) forwards; }
+        @keyframes signature-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+        .countdown { position: fixed; left: 50%; bottom: 3%; transform: translateX(-50%) translateY(30px); font-family: 'Courier New', Courier, monospace; font-size: 1.6rem; color: #333; background: #fff8; padding: 0.4em 1em; border-radius: 1em; z-index: 6; text-align: center; opacity: 0; transition: all 0.8s cubic-bezier(.77,0,.18,1); }
+        .countdown.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+        #floating-objects { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 10; }
+        .floating-petal { position: absolute; width: 24px; height: 32px; background: radial-gradient(ellipse at 60% 30%, #ffd6e0 60%, #ff69b4 100%); border-radius: 60% 40% 60% 40% / 60% 60% 40% 40%; }
+        
         @media (max-width: 700px) {
-            .tree-container {
-                width: 90vw !important;
-                height: 90vw !important;
-            }
-            .tree-container svg.move-and-scale {
-                transform: translateY(60px) scale(1.1);
-            }
-            .dedication-text {
-                left: 50%;
-                top: 8%;
-                transform: translateX(-50%);
-                width: 90vw;
-                font-size: 1rem;
-            }
-            .countdown {
-                font-size: 0.9rem;
-                bottom: 8%;
-            }
+            .tree-container { width: 90vw !important; height: 90vw !important; }
+            .tree-container svg.move-and-scale { transform: translateY(60px) scale(1.1); }
+            .dedication-text { left: 50%; top: 8%; transform: translateX(-50%); width: 90vw; font-size: 1rem; }
+            .countdown { font-size: 0.9rem; bottom: 8%; }
         }
     </style>
 </head>
 <body>
 
-    <div id="floating-objects"></div>
-    
-    <div class="dedication-text" id="dedication-text">
-        <div class="signature" id="signature"></div>
+    <div id="welcome-screen" onclick="initExperience()">
+        <svg class="banana-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path fill="#FFD700" d="M440.5,345.6c-7.6-13.6-14.8-26.8-21.6-39.6C389.5,253.4,344.6,169,258.7,97c-25.6-21.5-56.8-41-90.2-57.1 C152.5,32.3,135.8,25,119.3,18.6L99.9,11c-7-2.8-14.8-0.3-18.9,6.1C76.9,23.4,74,30.8,73.2,38.3c-0.6,5.8-0.3,11.7,1,17.4 c2.2,9.4,21.9,74.5,64.3,144.3c35.2,58,77.4,108.9,125.4,151.3c36.6,32.3,75.9,58.4,116.8,77.6c7.3,3.4,14.7,6.6,22.3,9.3 c14.5,5.2,30.8,8.2,47.7,8.6c6.8,0.2,13.3-3.1,17.3-8.7c3.9-5.6,4.9-13,2.5-19.3L440.5,345.6z"/>
+            <path fill="#8B4513" d="M119.3,18.6L99.9,11c-7-2.8-14.8-0.3-18.9,6.1C73.9,28.1,85.6,80,119.3,18.6z"/>
+            <path fill="#8B4513" d="M470.5,420.1c-14.5-5.2-21.9-16.9-30-30.5l30,30.5c6.8,0.2,13.3-3.1,17.3-8.7 C490,406,483,415,470.5,420.1z"/>
+        </svg>
+        <div class="click-text">TOCA LA BANANA</div>
     </div>
 
+    <div id="floating-objects"></div>
+    <div class="dedication-text" id="dedication-text"><div class="signature" id="signature"></div></div>
     <div class="countdown" id="countdown"></div>
-    
-    <div class="tree-container" id="tree-container">
-        </div>
-
-    <audio id="bg-music" preload="auto" loop></audio>
+    <div class="tree-container" id="tree-container"></div>
+    <audio id="bg-music" loop></audio>
 
     <script>
-        // --- JAVASCRIPT UNIFICADO ---
+        let experienceStarted = false;
 
-        // 1. Cargar el SVG (Asegúrate que Img/treelove.svg esté en la misma carpeta)
-        fetch('Img/treelove.svg')
-          .then(res => res.text())
-          .then(svgText => {
-            const container = document.getElementById('tree-container');
-            container.innerHTML = svgText;
-            const svg = container.querySelector('svg');
-            if (!svg) return;
+        // Función que se ejecuta al tocar la pantalla de inicio
+        function initExperience() {
+            if (experienceStarted) return;
+            experienceStarted = true;
 
-            const allPaths = Array.from(svg.querySelectorAll('path'));
-            allPaths.forEach(path => {
-              path.style.stroke = '#222';
-              path.style.strokeWidth = '2.5';
-              path.style.fillOpacity = '0';
-              const length = path.getTotalLength();
-              path.style.strokeDasharray = length;
-              path.style.strokeDashoffset = length;
-            });
-
+            // 1. Desvanecer y ocultar la pantalla de bienvenida
+            const welcome = document.getElementById('welcome-screen');
+            welcome.style.opacity = '0';
             setTimeout(() => {
-              allPaths.forEach((path, i) => {
-                path.style.transition = `stroke-dashoffset 1.2s cubic-bezier(.77,0,.18,1) ${i * 0.08}s, fill-opacity 0.5s ${0.9 + i * 0.08}s`;
-                path.style.strokeDashoffset = 0;
-                setTimeout(() => {
-                  path.style.fillOpacity = '1';
-                  path.style.stroke = '';
-                }, 1200 + i * 80);
-              });
+                welcome.style.display = 'none';
+                // Mostrar el contenedor del árbol
+                document.getElementById('tree-container').style.display = 'block';
+                // Iniciar la animación del árbol
+                startTreeAnimation();
+            }, 800);
 
-              const totalDuration = 1200 + (allPaths.length - 1) * 80 + 500;
-              setTimeout(() => {
-                svg.classList.add('move-and-scale');
-                setTimeout(() => {
-                  showDedicationText();
-                  startFloatingObjects();
-                  showCountdown();
-                  playBackgroundMusic();
-                }, 1200);
-              }, totalDuration);
-            }, 50);
-
-            const heartPaths = allPaths.filter(el => {
-              const style = el.getAttribute('style') || '';
-              return style.includes('#FC6F58') || style.includes('#C1321F');
-            });
-            heartPaths.forEach(path => path.classList.add('animated-heart'));
-          });
-
-        function getURLParam(name) {
-          const url = new URL(window.location.href);
-          return url.searchParams.get(name);
+            // 2. Iniciar música (requiere la carpeta Music/ y el archivo)
+            const audio = document.getElementById('bg-music');
+            // Busca si hay un parametro ?musica=cancion.mp3 en la URL, si no usa la por defecto
+            let musicaParam = new URL(window.location.href).searchParams.get('musica') || 'music1.mp3';
+            audio.src = 'Music/' + musicaParam;
+            audio.volume = 0.8;
+            audio.play().catch(e => console.log("Error al reproducir audio, quizás falta el archivo en la carpeta Music/"));
         }
 
-        function showDedicationText() { 
-          let text = getURLParam('text');
-          if (!text) {
-            text = `Para el Pecas:\n\nHola gordis :3 solo queria hacerte esta dedicacion y agradecerte de que seas mi amiwo.\n\neres un amigo increible w neta nunca cambies, se que no soy mucho de expresar mis sentimientos pero realmente te has vuelto alguien especial.\n\nEres un imbecil.... pero tambien eres una persona muy inteligente, amable y paciente. TKM MI AMOL :3`;
-          } else {
-            text = decodeURIComponent(text).replace(/\\n/g, '\n');
-          }
-          
-          const container = document.getElementById('dedication-text');
-          container.classList.add('typing');
-          let i = 0;
-          function type() {
-            if (i <= text.length) {
-              container.textContent = text.slice(0, i);
-              i++;
-              setTimeout(type, text[i - 2] === '\n' ? 350 : 45);
-            } else {
-              setTimeout(showSignature, 600);
+        // --- Lógica del Árbol y Animaciones ---
+        function startTreeAnimation() {
+            // IMPORTANTE: Asegúrate de que Img/treelove.svg exista
+            fetch('Img/treelove.svg')
+              .then(res => res.text())
+              .then(svgText => {
+                const container = document.getElementById('tree-container');
+                container.innerHTML = svgText;
+                const svg = container.querySelector('svg');
+                if (!svg) return;
+
+                const allPaths = Array.from(svg.querySelectorAll('path'));
+                allPaths.forEach(path => {
+                  path.style.stroke = '#222';
+                  path.style.strokeWidth = '2.5';
+                  path.style.fillOpacity = '0';
+                  const length = path.getTotalLength();
+                  path.style.strokeDasharray = length;
+                  path.style.strokeDashoffset = length;
+                });
+
+                // Secuencia de animación
+                setTimeout(() => {
+                  allPaths.forEach((path, i) => {
+                    path.style.transition = `stroke-dashoffset 1.2s cubic-bezier(.77,0,.18,1) ${i * 0.08}s, fill-opacity 0.5s ${0.9 + i * 0.08}s`;
+                    path.style.strokeDashoffset = 0;
+                    setTimeout(() => {
+                      path.style.fillOpacity = '1';
+                      path.style.stroke = '';
+                    }, 1200 + i * 80);
+                  });
+
+                  // Al terminar de dibujar
+                  setTimeout(() => {
+                    svg.classList.add('move-and-scale');
+                    setTimeout(() => {
+                      showDedicationText();
+                      startFloatingObjects();
+                      showCountdown();
+                    }, 1200);
+                  }, 1200 + (allPaths.length * 80));
+                }, 100);
+
+                // Animar los corazones rojos del árbol
+                const heartPaths = allPaths.filter(el => (el.getAttribute('style') || '').match(/#FC6F58|#C1321F/));
+                heartPaths.forEach(p => p.classList.add('animated-heart'));
+              });
+        }
+
+        // --- Funciones de Apoyo ---
+        function showDedicationText() {
+            // Texto por defecto si no hay parámetro en la URL
+            let text = `Para el Pecas:\n\nHola gordis :3 solo quería agradecerte que seas mi amiwo.\n\nEres un imbecil... pero también una persona muy inteligente y auténtica. Gracias por todo.\n\nTKM MI AMOL :3`;
+            
+            // (Opcional) Si quieres usar ?text= en la URL:
+            const urlText = new URL(window.location.href).searchParams.get('text');
+            if(urlText) text = decodeURIComponent(urlText).replace(/\\n/g, '\n');
+
+            const container = document.getElementById('dedication-text');
+            container.style.opacity = '1';
+            let i = 0;
+            function type() {
+                if (i <= text.length) {
+                    container.textContent = text.slice(0, i);
+                    i++;
+                    // Velocidad de tipeo
+                    setTimeout(type, text[i-2] === '\n' ? 350 : 45);
+                } else { showSignature(); }
             }
-          }
-          type();
+            type();
         }
 
         function showSignature() {
-          const dedication = document.getElementById('dedication-text');
-          let signature = document.createElement('div');
-          signature.id = 'signature';
-          signature.className = 'signature';
-          dedication.appendChild(signature);
-          
-          let firma = getURLParam('firma');
-          signature.textContent = firma ? decodeURIComponent(firma) : "Con amor, El Murfirio";
-          signature.classList.add('visible');
+            const dedication = document.getElementById('dedication-text');
+            let sig = document.createElement('div');
+            sig.className = 'signature visible';
+            sig.textContent = "Con amor, El Murfirio"; // Puedes cambiar esto
+            dedication.appendChild(sig);
         }
 
         function startFloatingObjects() {
-          const container = document.getElementById('floating-objects');
-          let count = 0;
-          function spawn() {
-            let el = document.createElement('div');
-            el.className = 'floating-petal';
-            el.style.left = `${Math.random() * 90 + 2}%`;
-            el.style.top = `${100 + Math.random() * 10}%`;
-            container.appendChild(el);
-
-            const duration = 6000 + Math.random() * 4000;
-            setTimeout(() => {
-              el.style.transition = `transform ${duration}ms linear, opacity 1.2s`;
-              el.style.transform = `translate(${(Math.random() - 0.5) * 60}px, -110vh) rotate(${Math.random() * 360}deg)`;
-              el.style.opacity = 0.2;
-            }, 30);
-
-            setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, duration + 2000);
-            if (count++ < 100) setTimeout(spawn, 400);
-          }
-          spawn();
+            const container = document.getElementById('floating-objects');
+            setInterval(() => {
+                let el = document.createElement('div');
+                el.className = 'floating-petal';
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = '100%'; // Empiezan desde abajo
+                container.appendChild(el);
+                const duration = 6000 + Math.random() * 4000;
+                // Animación de subida
+                el.animate([
+                    { transform: 'translate(0, 0) rotate(0deg)', opacity: 0.8 },
+                    { transform: `translate(${(Math.random()-0.5)*100}px, -110vh) rotate(360deg)`, opacity: 0 }
+                ], { duration: duration, easing: 'linear' });
+                setTimeout(() => el.remove(), duration);
+            }, 400); // Frecuencia de pétalos
         }
 
         function showCountdown() {
-          const container = document.getElementById('countdown');
-          let startDate = new Date('2024-08-08T00:00:00'); 
-          let eventDate = new Date('2026-08-08T00:00:00');
-
-          function update() {
-            const now = new Date();
-            let days = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-            let eDiff = eventDate - now;
-            let eDays = Math.max(0, Math.floor(eDiff / (1000 * 60 * 60 * 24)));
-            let eHrs = Math.max(0, Math.floor((eDiff / (1000 * 60 * 60)) % 24));
-            let eMin = Math.max(0, Math.floor((eDiff / (1000 * 60)) % 60));
-            let eSec = Math.max(0, Math.floor((eDiff / 1000) % 60));
-
-            container.innerHTML = `Llevamos siendo gordos: <b>${days}</b> días<br>` +
-                                  `Próximo gordiniversario: <b>${eDays}d ${eHrs}h ${eMin}m ${eSec}s</b>`;
-            container.classList.add('visible');
-          }
-          update();
-          setInterval(update, 1000);
+            const container = document.getElementById('countdown');
+            // FECHA INICIO: Cambia esto a cuando se conocieron (Año, Mes-1, Día)
+            const start = new Date('2024-08-08T00:00:00');
+            setInterval(() => {
+                const now = new Date();
+                const days = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+                container.innerHTML = `Llevamos siendo gordos: <b>${days}</b> días`;
+                container.classList.add('visible');
+            }, 1000);
         }
-
-        // --- Función de Música Actualizada ---
-function playBackgroundMusic() {
-  const audio = document.getElementById('bg-music');
-  let musicaParam = getURLParam('musica') || 'music1.mp3';
-  audio.src = 'Music/' + musicaParam;
-  audio.volume = 0.7;
-  audio.loop = true;
-
-  let btn = document.createElement('button');
-  btn.innerHTML = '▶️ Música'; // Inicia con icono de play
-  btn.style.cssText = 'position:fixed; bottom:18px; right:18px; z-index:99; background:rgba(255,255,255,0.9); border:none; border-radius:24px; padding:10px 18px; cursor:pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-family: sans-serif;';
-  document.body.appendChild(btn);
-
-  // Función para intentar reproducir
-  const startAudio = () => {
-    audio.play().then(() => {
-      btn.innerHTML = '🔊 Música';
-      // Una vez que empieza a sonar, quitamos los escuchadores para no reiniciar
-      window.removeEventListener('click', startAudio);
-      window.removeEventListener('touchstart', startAudio);
-    }).catch(err => console.log("Esperando interacción..."));
-  };
-
-  // Escuchar clics o toques en cualquier parte de la pantalla
-  window.addEventListener('click', startAudio);
-  window.addEventListener('touchstart', startAudio);
-
-  // Control manual del botón
-  btn.onclick = (e) => {
-    e.stopPropagation(); // Evita que el clic del botón active el listener global
-    if (audio.paused) {
-      audio.play();
-      btn.innerHTML = '🔊 Música';
-    } else {
-      audio.pause();
-      btn.innerHTML = '🔈 Música';
-    }
-  };
-}
     </script>
 </body>
 </html>
