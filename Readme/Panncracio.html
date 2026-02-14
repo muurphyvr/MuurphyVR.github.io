@@ -3,14 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorpresa para el Pecas</title>
+    <title>Protocolo: Gordiniversario</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- ESTILOS DE LA PANTALLA DE INICIO (BANANA) --- */
+        :root {
+            --bg-color: #050505;
+            --accent-pink: #ff0055;
+            --accent-orange: #ff8c00;
+            --accent-yellow: #ffd700;
+            --glass: rgba(20, 20, 20, 0.9);
+            --text-color: #e0e0e0;
+        }
+
+        body { 
+            margin: 0; 
+            padding: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            overflow: hidden; 
+            background: var(--bg-color); 
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text-color);
+        }
+
+        /* --- PANTALLA DE INICIO (LA BANANA HOLOGRÁFICA) --- */
         #welcome-screen {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: #fcfcfc;
+            background: #000;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -20,62 +42,173 @@
             transition: opacity 0.8s ease;
         }
 
+        /* Fondo de rejilla estilo cyber para la banana */
+        #welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 0, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+        }
+
         .banana-svg {
-            width: 120px;
+            width: 140px;
             height: auto;
-            filter: drop-shadow(0 8px 15px rgba(255, 215, 0, 0.5));
+            /* Efecto Neón Dorado */
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
             animation: float-rock 2.5s ease-in-out infinite alternate;
+            z-index: 2;
         }
 
         @keyframes float-rock {
             0% { transform: translateY(0) rotate(-5deg); }
-            100% { transform: translateY(-25px) rotate(5deg); }
+            100% { transform: translateY(-20px) rotate(5deg); }
         }
 
         .click-text {
             margin-top: 40px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.3rem;
-            color: #FFD700;
-            text-shadow: 1px 1px 2px #DAA520;
-            letter-spacing: 2px;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+            letter-spacing: 4px;
             font-weight: bold;
-            animation: blink 1.5s infinite;
+            text-transform: uppercase;
+            animation: glitch-blink 2s infinite;
+            border: 1px solid var(--accent-yellow);
+            padding: 10px 20px;
+            background: rgba(255, 215, 0, 0.05);
+            z-index: 2;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        @keyframes glitch-blink {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--accent-yellow); }
+            50% { opacity: 0.7; box-shadow: none; }
+            52% { opacity: 0.2; }
+            54% { opacity: 0.7; }
         }
 
-        /* --- ESTILOS GENERALES --- */
-        body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background: #fcfcfc; font-size: 16px; }
+        /* --- EL ÁRBOL HOLOGRÁFICO --- */
+        .tree-container { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 520px; 
+            height: 520px; 
+            z-index: 2; 
+            display: none; 
+            /* Filtro para que el SVG brille como neón */
+            filter: drop-shadow(0 0 5px var(--accent-pink));
+        }
         
-        .tree-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 520px; height: 520px; z-index: 2; display: none; }
         .tree-container svg { width: 100%; height: 100%; display: block; }
         .tree-container svg path { transition: fill-opacity 0.5s, stroke-dashoffset 1.2s; }
-        .tree-container svg.move-and-scale { transition: transform 1.2s cubic-bezier(.77,0,.18,1); transform: translateX(200px) scale(1.35); }
         
-        .animated-heart { transform-origin: center; animation: beat 1s infinite; }
+        .tree-container svg.move-and-scale { 
+            transition: transform 1.2s cubic-bezier(.77,0,.18,1); 
+            transform: translateX(200px) scale(1.35); 
+        }
+        
+        .animated-heart { 
+            transform-origin: center; 
+            animation: beat 1s infinite; 
+            filter: drop-shadow(0 0 8px red);
+        }
         @keyframes beat { 0%, 100% { transform: scale(1); } 20% { transform: scale(1.1); } 40% { transform: scale(0.95); } 60% { transform: scale(1.08); } 80% { transform: scale(1); } }
         
-        .dedication-text { position: absolute; top: 50%; left: 3%; transform: translateY(-50%); min-width: 320px; max-width: 600px; font-size: 1.5rem; color: #050505; font-family: 'Courier New', Courier, monospace; white-space: pre-line; z-index: 3; opacity: 0; background: rgba(255,255,255,0.92); border-radius: 0.7em; box-shadow: 0 2px 16px rgba(230,0,38,0.06); padding: 1em 1.5em; transition: opacity 0.6s; }
+        /* --- DEDICATORIA ESTILO TERMINAL --- */
+        .dedication-text { 
+            position: absolute; 
+            top: 50%; 
+            left: 5%; 
+            transform: translateY(-50%); 
+            min-width: 320px; 
+            max-width: 600px; 
+            font-size: 1.2rem; 
+            color: #fff; 
+            font-family: 'Share Tech Mono', monospace; 
+            white-space: pre-line; 
+            z-index: 3; 
+            opacity: 0; 
+            /* Estilo Cristal Oscuro */
+            background: var(--glass);
+            border: 1px solid var(--accent-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.15);
+            border-radius: 8px; 
+            padding: 2em; 
+            transition: opacity 0.6s; 
+        }
+
+        /* Línea decorativa arriba de la carta */
+        .dedication-text::before {
+            content: ">>> INCOMING MESSAGE...";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg-color);
+            color: var(--accent-pink);
+            padding: 0 10px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
         
-        .signature { margin-top: 1.5em; font-family: 'Courier New', Courier, monospace; font-size: 2.2rem; color: #e60026; opacity: 0; transition: opacity 0.7s; }
-        .signature.visible { opacity: 1; animation: signature-draw 2.2s steps(24) forwards; }
-        @keyframes signature-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+        .signature { 
+            margin-top: 1.5em; 
+            font-size: 1.8rem; 
+            color: var(--accent-orange); 
+            opacity: 0; 
+            transition: opacity 0.7s; 
+            text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+        }
+        .signature.visible { opacity: 1; }
         
-        .countdown { position: fixed; left: 50%; bottom: 3%; transform: translateX(-50%) translateY(30px); font-family: 'Courier New', Courier, monospace; font-size: 1.6rem; color: #333; background: #fff8; padding: 0.4em 1em; border-radius: 1em; z-index: 6; text-align: center; opacity: 0; transition: all 0.8s cubic-bezier(.77,0,.18,1); }
+        /* --- CONTADOR --- */
+        .countdown { 
+            position: fixed; 
+            left: 50%; 
+            bottom: 5%; 
+            transform: translateX(-50%) translateY(30px); 
+            font-family: 'Share Tech Mono', monospace; 
+            font-size: 1.2rem; 
+            color: #ccc; 
+            background: rgba(0, 0, 0, 0.8); 
+            border: 1px solid #333;
+            padding: 1em 2em; 
+            border-radius: 4px; 
+            z-index: 6; 
+            text-align: center; 
+            opacity: 0; 
+            transition: all 0.8s cubic-bezier(.77,0,.18,1); 
+        }
+        .countdown b {
+            color: var(--accent-orange);
+            font-size: 1.4rem;
+        }
         .countdown.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
         
+        /* --- OBJETOS FLOTANTES (AHORA DIGITALES) --- */
         #floating-objects { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 10; }
-        .floating-petal { position: absolute; width: 24px; height: 32px; background: radial-gradient(ellipse at 60% 30%, #ffd6e0 60%, #ff69b4 100%); border-radius: 60% 40% 60% 40% / 60% 60% 40% 40%; }
         
-        @media (max-width: 700px) {
-            .tree-container { width: 90vw !important; height: 90vw !important; }
-            .tree-container svg.move-and-scale { transform: translateY(60px) scale(1.1); }
-            .dedication-text { left: 50%; top: 8%; transform: translateX(-50%); width: 90vw; font-size: 1rem; }
-            .countdown { font-size: 0.9rem; bottom: 8%; }
+        /* En lugar de pétalos redondos, cuadrados neón */
+        .floating-petal { 
+            position: absolute; 
+            width: 15px; 
+            height: 15px; 
+            background: rgba(255, 0, 85, 0.4); 
+            border: 1px solid var(--accent-pink);
+            box-shadow: 0 0 10px var(--accent-pink);
+        }
+        
+        /* CANVAS DE FONDO (Si quieres usar el efecto de corazones/partículas anterior) */
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.3; }
+
+        @media (max-width: 800px) {
+            .tree-container { width: 90vw !important; height: 90vw !important; opacity: 0.3; }
+            .tree-container svg.move-and-scale { transform: translate(0, 0) scale(1); }
+            .dedication-text { left: 50%; top: 50%; transform: translate(-50%, -50%); width: 90vw; font-size: 1rem; background: rgba(0,0,0,0.95); }
+            .countdown { font-size: 0.8rem; width: 90%; bottom: 2%; }
         }
     </style>
 </head>
@@ -87,13 +220,17 @@
             <path fill="#8B4513" d="M119.3,18.6L99.9,11c-7-2.8-14.8-0.3-18.9,6.1C73.9,28.1,85.6,80,119.3,18.6z"/>
             <path fill="#8B4513" d="M470.5,420.1c-14.5-5.2-21.9-16.9-30-30.5l30,30.5c6.8,0.2,13.3-3.1,17.3-8.7 C490,406,483,415,470.5,420.1z"/>
         </svg>
-        <div class="click-text">TOCA LA BANNANNA</div>
+        <div class="click-text">>>> TOCA LA BANANA <<<</div>
     </div>
 
     <div id="floating-objects"></div>
+    
     <div class="dedication-text" id="dedication-text"><div class="signature" id="signature"></div></div>
+    
     <div class="countdown" id="countdown"></div>
+    
     <div class="tree-container" id="tree-container"></div>
+    
     <audio id="bg-music" loop></audio>
 
     <script>
@@ -111,14 +248,17 @@
                 startTreeAnimation();
             }, 800);
 
+            // MÚSICA
             const audio = document.getElementById('bg-music');
             let musicaParam = new URL(window.location.href).searchParams.get('musica') || 'music1.mp3';
-            audio.src = 'Music/' + musicaParam;
+            // Asegúrate que la ruta sea correcta según tu estructura de carpetas
+            audio.src = 'Music/' + musicaParam; 
             audio.volume = 0.8;
             audio.play().catch(e => console.log("Interacción requerida para audio"));
         }
 
         function startTreeAnimation() {
+            // Asegúrate que 'Img/treelove.svg' exista en tu carpeta Img
             fetch('Img/treelove.svg')
               .then(res => res.text())
               .then(svgText => {
@@ -129,8 +269,9 @@
 
                 const allPaths = Array.from(svg.querySelectorAll('path'));
                 allPaths.forEach(path => {
-                  path.style.stroke = '#222';
-                  path.style.strokeWidth = '2.5';
+                  // CAMBIO: Trazos color neón rosa en lugar de negro
+                  path.style.stroke = '#ff0055'; 
+                  path.style.strokeWidth = '3';
                   path.style.fillOpacity = '0';
                   const length = path.getTotalLength();
                   path.style.strokeDasharray = length;
@@ -142,6 +283,8 @@
                     path.style.transition = `stroke-dashoffset 1.2s cubic-bezier(.77,0,.18,1) ${i * 0.08}s, fill-opacity 0.5s ${0.9 + i * 0.08}s`;
                     path.style.strokeDashoffset = 0;
                     setTimeout(() => {
+                      // CAMBIO: Al rellenarse, usar un color blanco/rosado brillante
+                      path.style.fill = '#ffe6ea'; 
                       path.style.fillOpacity = '1';
                       path.style.stroke = '';
                     }, 1200 + i * 80);
@@ -151,7 +294,7 @@
                     svg.classList.add('move-and-scale');
                     setTimeout(() => {
                       showDedicationText();
-                      startFloatingObjects();
+                      startFloatingObjects(); // Ahora son glitch/datos
                       showCountdown();
                     }, 1200);
                   }, 1200 + (allPaths.length * 80));
@@ -173,7 +316,8 @@
             let i = 0;
             function type() {
                 if (i <= text.length) {
-                    container.textContent = text.slice(0, i);
+                    // Usamos innerText para respetar saltos de linea
+                    container.innerText = text.slice(0, i);
                     i++;
                     setTimeout(type, text[i-2] === '\n' ? 350 : 45);
                 } else { showSignature(); }
@@ -196,32 +340,38 @@
                 el.className = 'floating-petal';
                 el.style.left = Math.random() * 100 + '%';
                 el.style.top = '100%';
+                
+                // Variación de colores neón
+                const colors = ['#ff0055', '#ff8c00', '#00ffcc'];
+                el.style.borderColor = colors[Math.floor(Math.random() * colors.length)];
+                el.style.background = 'transparent';
+
                 container.appendChild(el);
-                const duration = 6000 + Math.random() * 4000;
+                const duration = 4000 + Math.random() * 4000;
+                
+                // Animación hacia arriba (datos subiendo a la nube)
                 el.animate([
-                    { transform: 'translate(0, 0) rotate(0deg)', opacity: 0.8 },
-                    { transform: `translate(${(Math.random()-0.5)*100}px, -110vh) rotate(360deg)`, opacity: 0 }
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 0.8 },
+                    { transform: `translateY(-110vh) rotate(360deg)`, opacity: 0 }
                 ], { duration: duration, easing: 'linear' });
+                
                 setTimeout(() => el.remove(), duration);
-            }, 400);
+            }, 300);
         }
 
-        // --- FUNCIÓN DE CUENTA REGRESIVA RESTAURADA ---
         function showCountdown() {
             const container = document.getElementById('countdown');
             
-            // FECHAS (Puedes editarlas aquí si es necesario)
+            // FECHAS (No modificadas)
             const startDate = new Date('2024-08-08T00:00:00');
             const eventDate = new Date('2026-08-08T00:00:00');
 
             function update() {
                 const now = new Date();
                 
-                // 1. Días transcurridos
                 let diff = now - startDate;
                 let days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-                // 2. Cuenta regresiva al Gordiniversario
                 let eventDiff = eventDate - now;
                 let eventDays = Math.max(0, Math.floor(eventDiff / (1000 * 60 * 60 * 24)));
                 let eventHours = Math.max(0, Math.floor((eventDiff / (1000 * 60 * 60)) % 24));
@@ -230,13 +380,14 @@
 
                 container.innerHTML =
                     `Llevamos siendo gordos juntos: <b>${days}</b> días<br>` +
+                    `<span style="color:#666">---------------------------</span><br>` +
                     `Nuestro gordiniversario: <b>${eventDays}d ${eventHours}h ${eventMinutes}m ${eventSeconds}s</b>`;
                 
                 container.classList.add('visible');
             }
 
-            update(); // Ejecutar inmediatamente
-            setInterval(update, 1000); // Actualizar cada segundo
+            update(); 
+            setInterval(update, 1000); 
         }
     </script>
 </body>
